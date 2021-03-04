@@ -1,13 +1,12 @@
 
 const express = require('express');
 const app = express();
-const { performance } = require('perf_hooks');
+const logResponseTime = require("./middleware/endpointLogger");
 
-const msgLog = (logMsg, time) => {console.log(logMsg, time)};
+app.use(logResponseTime);
 
 app.get('/', function (req, res) {
   res.send('Server is running.');
-  
 })
 
 app.listen(3000)
