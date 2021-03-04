@@ -14,7 +14,6 @@ function App() {
       <div>
         <Switch>
           <Route path="/playMatch">
-            <Home />
           </Route>
           <Route path="/home">
             <Home />
