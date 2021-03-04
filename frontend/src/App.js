@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 
 import Home from './pages/Home.js';
+import PlayMatch from './pages/PlayMatch.js';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <div>
         <Switch>
           <Route path="/playMatch">
+            <PlayMatch />
           </Route>
           <Route path="/home">
             <Home />
