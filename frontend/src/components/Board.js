@@ -154,7 +154,7 @@ class HumanVsHuman extends Component {
 export default function WithMoveValidation() {
   return (
     <div>
-      <HumanVsHuman>
+      <HumanVsHuman >
         {({
           position,
           onDrop,
@@ -168,14 +168,15 @@ export default function WithMoveValidation() {
         }) => (
           <Chessboard
             id="humanVsHuman"
-            width={320}
+            width={600}
             position={position}
             onDrop={onDrop}
             onMouseOverSquare={onMouseOverSquare}
             onMouseOutSquare={onMouseOutSquare}
             boardStyle={{
               borderRadius: "5px",
-              boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`
+              boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`,
+              margin: `0 auto`
             }}
             squareStyles={squareStyles}
             dropSquareStyle={dropSquareStyle}
