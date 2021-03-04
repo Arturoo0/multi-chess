@@ -17,6 +17,9 @@ app.get('/', function (req, res) {
 
 io.on('connection', (socket) => {
   console.log('Connected to by id : %s', socket.id);
+  socket.on('testCom', (arg) => {
+    console.log(arg);
+  });
 });
 
 const port = 3000;

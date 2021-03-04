@@ -4,13 +4,10 @@ import { Board } from '../components';
 import socketIOClient from "socket.io-client";
 
 const PlayMatch = () => {
-    const SERVER = "http://localhost:3000/";
-
     useEffect(() => {
+        const SERVER = "http://localhost:3000/";
         const socket = socketIOClient(SERVER);
-        socket.on("connection", () => {
-          console.log(socket.id);
-        });
+        socket.emit('testCom', 'testMsg');
     }, []);
 
     return (
