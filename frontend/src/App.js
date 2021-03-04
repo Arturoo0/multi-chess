@@ -1,9 +1,27 @@
 
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+
+import Home from './pages/Home.js';
+
 function App() {
   return (
-    <div className="App">
-      testing
-    </div>
+    <Router>
+      <div>
+        <Switch>
+          <Route path="/playMatch">
+            <Home />
+          </Route>
+          <Route path="/home">
+            <Home />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   );
 }
 
