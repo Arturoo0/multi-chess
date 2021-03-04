@@ -1,5 +1,5 @@
 
-const express = require('./node_modules/express');
+const express = require('express');
 const app = express();
 const logResponseTime = require("./middleware/endpointLogger");
 
