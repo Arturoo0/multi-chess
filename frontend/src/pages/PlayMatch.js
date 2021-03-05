@@ -24,10 +24,10 @@ const PlayMatch = () => {
         const SERVER = "http://localhost:3000/";
         const socket = socketIOClient(SERVER);
         socket.emit('joinRoom', urlParams.match);
-        socket.on('connectedToRoom', (numberOfMembers, id) => {
+        socket.on('connectedToRoom', (numberOfMembers) => {
             setUserCount(numberOfMembers);
-            setSocketID(id);
             if (numberOfMembers === 2) setLinkState(false);
+            setSocketID(socket.id);
         });
     }, []);
 
