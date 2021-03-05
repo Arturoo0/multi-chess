@@ -4,7 +4,6 @@ import socketIOClient from "socket.io-client";
 import Chessboard from "chessboardjsx";
 
 const PlayMatch = () => {
-    // maybe move this over into a utility folder
     const pullURL = () => {
         const windowUrl = window.location.search;
         const params = new URLSearchParams(windowUrl);
