@@ -4,13 +4,25 @@ import { Board } from '../components';
 import socketIOClient from "socket.io-client";
 
 const PlayMatch = () => {
+    // maybe move this over into a utility folder
+    const pullURL = () => {
+        const windowUrl = window.location.search;
+        const params = new URLSearchParams(windowUrl);
+        let paramObj = {};
+        for (let p of params){
+            paramObj[p[0]] = p[1];
+        }
+        return paramObj
+    }
+
     const [connectedUsers, setUserCount] = useState(0);
     const [displayLinkState, setLinkState] = useState(true);
     const [socketID, setSocketID] = useState(0);
+    const [urlParams, setParams] = useState(pullURL());
+
     useEffect(() => {
         const SERVER = "http://localhost:3000/";
         const socket = socketIOClient(SERVER);
-        // socket.emit('testCom', 'testMsg');
         socket.emit('joinRoom');
         socket.on('connectedToRoom', (numberOfMembers) => {
             setUserCount(numberOfMembers);
