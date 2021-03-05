@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Board } from '../components';
 import socketIOClient from "socket.io-client";
+import Chessboard from "chessboardjsx";
 
 const PlayMatch = () => {
     // maybe move this over into a utility folder
@@ -39,7 +40,8 @@ const PlayMatch = () => {
         <div>
             <p>Current room members - {connectedUsers}</p>
             {displayLink()}
-            <Board boardFEN={'2R5/4bppk/1p1p3Q/5R1P/4P3/5P2/r4q1P/7K b - - 6 50'}/>
+            {/* <Board /> */}
+            <Chessboard position='start'/>
         </div>
     );
 }
