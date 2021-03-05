@@ -24,15 +24,15 @@ const PlayMatch = () => {
         const SERVER = "http://localhost:3000/";
         const socket = socketIOClient(SERVER);
         socket.emit('joinRoom', urlParams.match);
-        socket.on('connectedToRoom', (numberOfMembers) => {
+        socket.on('connectedToRoom', (numberOfMembers, id) => {
             setUserCount(numberOfMembers);
+            setSocketID(id);
             if (numberOfMembers === 2) setLinkState(false);
         });
-        setSocketID(socket.id);
     }, []);
 
     const displayLink = () => {
-        if (displayLinkState) return <p>Invite link</p>
+        if (displayLinkState) return <p>Invite link - localhost:3001/playMatch?match={socketID}</p>
     }
 
     return (

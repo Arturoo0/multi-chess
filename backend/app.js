@@ -26,11 +26,11 @@ io.on('connection', (socket) => {
     if (inv in rooms && rooms[inv].currentlyConnected < 2){
       socket.join(inv);
       rooms[inv].currentlyConnected += 1;
-      socket.emit('connectedToRoom', rooms[inv].currentlyConnected);
+      socket.emit('connectedToRoom', rooms[inv].currentlyConnected, inv);
     }else if (!(socket.id in rooms)){
       rooms[socket.id] = {currentlyConnected : 1};
       socket.join(socket.id);
-      socket.emit('connectedToRoom', rooms[socket.id].currentlyConnected);
+      socket.emit('connectedToRoom', rooms[socket.id].currentlyConnected, socket.id);
     }
     console.log(rooms);
   });
