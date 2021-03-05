@@ -37,14 +37,18 @@ const PlayMatch = () => {
         if (displayLinkState) return <p>Invite link - localhost:3001/playMatch?match={socketID}</p>
     }
 
+    const updateBoard = (position) => {
+        setBoardPosition(position);
+    }
+
     return (
         <div>
             <p>Current room members - {connectedUsers}</p>
             {displayLink()}
             {/* <Board /> */}
             <Chessboard 
-                position={'start'}
-                // getPosition={position => console.log(position)}
+                position={boardPosition}
+                getPosition={position => updateBoard(position)}
             />
         </div>
     );

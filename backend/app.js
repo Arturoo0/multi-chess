@@ -29,7 +29,7 @@ io.on('connection', (socket) => {
     }else if (!(socket.id in rooms)){
       rooms[socket.id] = {currentlyConnected : 1, gameObj : new Chess(baseStartingFEN)};
       socket.join(socket.id);
-      socket.emit('connectedToRoom', rooms[socket.id].currentlyConnected, rooms[socket.id].gameObj.fen);
+      socket.emit('connectedToRoom', rooms[socket.id].currentlyConnected, rooms[socket.id].gameObj.fen());
     }
     console.log(rooms);
   });
