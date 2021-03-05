@@ -16,17 +16,18 @@ app.get('/', function (req, res) {
 })
 
 let rooms = {};
+const baseStartingFEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 io.on('connection', (socket) => {
   console.log('Connected to by id : %s', socket.id);
   socket.on('joinRoom', (inv) => {
     if (inv in rooms && rooms[inv].currentlyConnected < 2){
       socket.join(inv);
       rooms[inv].currentlyConnected += 1;
-      io.in(inv).emit("connectedToRoom", rooms[inv].currentlyConnected, 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
+      io.in(inv).emit("connectedToRoom", rooms[inv].currentlyConnected, baseStartingFEN);
     }else if (!(socket.id in rooms)){
       rooms[socket.id] = {currentlyConnected : 1};
       socket.join(socket.id);
-      socket.emit('connectedToRoom', rooms[socket.id].currentlyConnected, 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
+      socket.emit('connectedToRoom', rooms[socket.id].currentlyConnected, baseStartingFEN);
     }
     console.log(rooms);
   });
