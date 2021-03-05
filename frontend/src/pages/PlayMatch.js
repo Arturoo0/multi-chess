@@ -19,13 +19,15 @@ const PlayMatch = () => {
     const [displayLinkState, setLinkState] = useState(true);
     const [socketID, setSocketID] = useState(0);
     const [urlParams, setParams] = useState(pullURL());
+    const [boardPosition, setBoardPosition] = useState('');
 
     useEffect(() => {
         const SERVER = "http://localhost:3000/";
         const socket = socketIOClient(SERVER);
         socket.emit('joinRoom', urlParams.match);
-        socket.on('connectedToRoom', (numberOfMembers) => {
+        socket.on('connectedToRoom', (numberOfMembers, boardPosition) => {
             setUserCount(numberOfMembers);
+            setBoardPosition(boardPosition);
             if (numberOfMembers === 2) setLinkState(false);
             setSocketID(socket.id);
         });
@@ -40,7 +42,7 @@ const PlayMatch = () => {
             <p>Current room members - {connectedUsers}</p>
             {displayLink()}
             {/* <Board /> */}
-            <Chessboard position='start'/>
+            <Chessboard position={boardPosition}/>
         </div>
     );
 }
