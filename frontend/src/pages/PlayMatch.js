@@ -42,7 +42,10 @@ const PlayMatch = () => {
             <p>Current room members - {connectedUsers}</p>
             {displayLink()}
             {/* <Board /> */}
-            <Chessboard position={boardPosition}/>
+            <Chessboard 
+                position={'start'}
+                // getPosition={position => console.log(position)}
+            />
         </div>
     );
 }

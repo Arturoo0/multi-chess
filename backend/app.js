@@ -1,12 +1,14 @@
 
 const app = require('express')();
 const http = require('http').createServer(app);
+const cors = require('cors');
+const { Chess } = require('chess.js');
 const io = require("socket.io")(http, {
   cors: {
     origin: "http://localhost:3001",
     methods: ["GET", "POST"]
   }
-});const cors = require('cors');
+});
 
 const logResponseTime = require("./middleware/endpointLogger");
 app.use(logResponseTime, cors);
@@ -23,11 +25,11 @@ io.on('connection', (socket) => {
     if (inv in rooms && rooms[inv].currentlyConnected < 2){
       socket.join(inv);
       rooms[inv].currentlyConnected += 1;
-      io.in(inv).emit("connectedToRoom", rooms[inv].currentlyConnected, baseStartingFEN);
+      io.in(inv).emit("connectedToRoom", rooms[inv].currentlyConnected, rooms[inv].gameObj.fen);
     }else if (!(socket.id in rooms)){
-      rooms[socket.id] = {currentlyConnected : 1};
+      rooms[socket.id] = {currentlyConnected : 1, gameObj : new Chess(baseStartingFEN)};
       socket.join(socket.id);
-      socket.emit('connectedToRoom', rooms[socket.id].currentlyConnected, baseStartingFEN);
+      socket.emit('connectedToRoom', rooms[socket.id].currentlyConnected, rooms[socket.id].gameObj.fen);
     }
     console.log(rooms);
   });
