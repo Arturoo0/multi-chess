@@ -25,14 +25,20 @@ io.on('connection', (socket) => {
     if (inv in rooms && rooms[inv].currentlyConnected < 2){
       socket.join(inv);
       rooms[inv].currentlyConnected += 1;
-      io.in(inv).emit("connectedToRoom", rooms[inv].currentlyConnected, rooms[inv].gameObj.fen);
+      io.in(inv).emit("connectedToRoom", rooms[inv].currentlyConnected, rooms[inv].gameObj.fen(), inv);
     }else if (!(socket.id in rooms)){
       rooms[socket.id] = {currentlyConnected : 1, gameObj : new Chess(baseStartingFEN)};
       socket.join(socket.id);
-      socket.emit('connectedToRoom', rooms[socket.id].currentlyConnected, rooms[socket.id].gameObj.fen());
+      socket.emit('connectedToRoom', rooms[socket.id].currentlyConnected, rooms[socket.id].gameObj.fen(), socket.id);
     }
     console.log(rooms);
   });
+  
+  socket.on('moveMade', (pos, roomID) => {
+    // const chessObj = new Chess();
+    // rooms[socket.id] = gameObj.load(chessObj.fen(pos));
+    io.in(roomID).emit("updateBoard", pos);
+  })
 });
 
 const port = 3000;

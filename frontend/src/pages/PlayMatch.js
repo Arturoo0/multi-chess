@@ -19,18 +19,25 @@ const PlayMatch = () => {
     const [displayLinkState, setLinkState] = useState(true);
     const [socketID, setSocketID] = useState(0);
     const [urlParams, setParams] = useState(pullURL());
-    const [boardPosition, setBoardPosition] = useState('');
+    const [currBoardPos, setBoardPosition] = useState('');
+    const [currSocketConn, setSocket] = useState(0);
+    const [roomName, setName] = useState(0);
 
     useEffect(() => {
         const SERVER = "http://localhost:3000/";
         const socket = socketIOClient(SERVER);
+        setSocket(socket);
         socket.emit('joinRoom', urlParams.match);
-        socket.on('connectedToRoom', (numberOfMembers, boardPosition) => {
+        socket.on('connectedToRoom', (numberOfMembers, boardPosition, roomID) => {
             setUserCount(numberOfMembers);
             setBoardPosition(boardPosition);
+            setName(roomID);
             if (numberOfMembers === 2) setLinkState(false);
             setSocketID(socket.id);
         });
+        socket.on('updateBoard', (pos) => {
+            setBoardPosition(pos);
+        })
     }, []);
 
     const displayLink = () => {
@@ -39,6 +46,7 @@ const PlayMatch = () => {
 
     const updateBoard = (position) => {
         setBoardPosition(position);
+        currSocketConn.emit('moveMade', position, roomName);
     }
 
     return (
@@ -47,7 +55,7 @@ const PlayMatch = () => {
             {displayLink()}
             {/* <Board /> */}
             <Chessboard 
-                position={boardPosition}
+                position={currBoardPos}
                 getPosition={position => updateBoard(position)}
             />
         </div>
