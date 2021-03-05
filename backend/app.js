@@ -18,10 +18,6 @@ app.get('/', function (req, res) {
 let rooms = {};
 io.on('connection', (socket) => {
   console.log('Connected to by id : %s', socket.id);
-  socket.on('testCom', (arg) => {
-    console.log(arg);
-  });
-
   socket.on('joinRoom', (inv) => {
     if (inv in rooms && rooms[inv].currentlyConnected < 2){
       socket.join(inv);
