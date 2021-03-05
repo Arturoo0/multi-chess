@@ -6,7 +6,7 @@ import Chessboard from "chessboardjsx";
 
 class HumanVsHuman extends Component {
   static propTypes = { children: PropTypes.func };
-
+ 
   state = {
     fen: "start",
     // square styles for active drop square
@@ -150,7 +150,7 @@ class HumanVsHuman extends Component {
   }
 }
 
-export default function WithMoveValidation() {
+export default function WithMoveValidation(props) {
   return (
     <div>
       <HumanVsHuman >

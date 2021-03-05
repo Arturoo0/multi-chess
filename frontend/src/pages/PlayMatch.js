@@ -13,13 +13,13 @@ const PlayMatch = () => {
         socket.on('connectedToRoom', (numberOfMembers) => {
             console.log('returnedValue', numberOfMembers)
             setUserCount(numberOfMembers);
-        })
+        });
     }, []);
 
     return (
         <div>
             <p>Current room members - {connectedUsers}</p>
-            <Board />
+            <Board boardFEN={'2R5/4bppk/1p1p3Q/5R1P/4P3/5P2/r4q1P/7K b - - 6 50'}/>
         </div>
     );
 }
