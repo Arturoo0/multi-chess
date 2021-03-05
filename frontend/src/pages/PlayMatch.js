@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect } from "react";
-import { Board } from '../components';
 import socketIOClient from "socket.io-client";
 import Chessboard from "chessboardjsx";
 
