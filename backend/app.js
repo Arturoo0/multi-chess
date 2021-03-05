@@ -22,16 +22,17 @@ io.on('connection', (socket) => {
     console.log(arg);
   });
 
-  socket.on('joinRoom', () => {
-    if (!(socket.id in rooms)){
+  socket.on('joinRoom', (inv) => {
+    if (inv in rooms && rooms[inv].currentlyConnected < 2){
+      socket.join(inv);
+      rooms[inv].currentlyConnected += 1;
+      socket.emit('connectedToRoom', rooms[inv].currentlyConnected);
+    }else if (!(socket.id in rooms)){
       rooms[socket.id] = {currentlyConnected : 1};
       socket.join(socket.id);
-    } else if (rooms[socket.id] < 2){
-      socket.join(socket.id);
-      rooms[socket.id].currentlyConnected += 1; 
+      socket.emit('connectedToRoom', rooms[socket.id].currentlyConnected);
     }
     console.log(rooms);
-    socket.emit('connectedToRoom', rooms[socket.id].currentlyConnected);
   });
 });
 
