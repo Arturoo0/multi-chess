@@ -1,14 +1,15 @@
 import React from 'react';
 import './CSS/Home.css';
+import { JoinCard } from '../components';
 
 const Home = () => {
   return (
     <div id='home-root-container'>
       <div className='home-choice-card'>
-        <p>Create Match</p>
+        <JoinCard />
       </div>
       <div className='home-choice-card'>
-        <p>Join Match</p>
+        <JoinCard />
       </div>
     </div>
   );

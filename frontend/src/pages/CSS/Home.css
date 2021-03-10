@@ -2,12 +2,12 @@
 #home-root-container {
     display: flex;
     justify-content: center;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     height: 100vh;
     width: 100vw;
 }
 
 .home-choice-card {
-    background-color: blue;
+    margin: 20px 0;
 }
