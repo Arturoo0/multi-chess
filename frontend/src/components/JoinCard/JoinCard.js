@@ -17,7 +17,7 @@ const JoinCard = () => {
                     <CardText>Paste the given URL into the browser or provided box.</CardText>
                     <Form inline id='form-submit-container'>
                         <FormGroup className="mb-2 me-sm-2 mb-sm-0">
-                            <Input type="password" name="password" id="examplePassword" placeholder="don't tell!" />
+                            <Input type="password" name="password" id="examplePassword" placeholder="Lobby URL" />
                         </FormGroup>
                         <Button>Submit</Button>
                     </Form>
