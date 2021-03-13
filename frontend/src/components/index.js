@@ -1,5 +1,5 @@
 
-import JoinCard from './JoinCard.js';
+import JoinCard from './JoinCard/JoinCard.js';
 
 export {
     JoinCard
