@@ -1,12 +1,12 @@
 import React from 'react';
 import './CSS/Home.css';
-import { JoinCard } from '../components';
+import { JoinCard, CreateCard } from '../components';
 
 const Home = () => {
   return (
     <div id='home-root-container'>
       <div className='home-choice-card'>
-        <JoinCard />
+        <CreateCard />
       </div>
       <div className='home-choice-card'>
         <JoinCard />
