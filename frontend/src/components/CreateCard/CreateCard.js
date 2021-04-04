@@ -21,8 +21,8 @@ const CreateCard = (props) => {
             <Card>
                 <CardBody>
                     <CardTitle tag="h5">Create a Match</CardTitle>
-                    <div style={{display : 'flex'}}>
-                        <Button style={{alignItems : 'center'}} onClick={handleCreateSubmit}>Create</Button>
+                    <div style={{display : 'flex', justifyContent : 'center'}}>
+                        <Button onClick={handleCreateSubmit}>Create</Button>
                     </div>
                 </CardBody>
             </Card>

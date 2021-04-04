@@ -39,7 +39,6 @@ io.on('connection', (socket) => {
       socket.join(socket.id);
       socket.emit('connectedToRoom', rooms[socket.id].currentlyConnected, rooms[socket.id].gameObj.fen(), socket.id);
     }
-    console.log(rooms);
   });
   
   socket.on('moveMade', (pos, roomID) => {
