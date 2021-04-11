@@ -22,7 +22,7 @@ const CreateCard = (props) => {
                 <CardBody>
                     <CardTitle tag="h5">Create a Match</CardTitle>
                     <div style={{display : 'flex', justifyContent : 'center'}}>
-                        <Button onClick={handleCreateSubmit}>Create</Button>
+                        <Button style={{backgroundColor : '#28df99', border : 'none'}} onClick={handleCreateSubmit}>Create</Button>
                     </div>
                 </CardBody>
             </Card>

@@ -25,7 +25,6 @@ const JoinCard = (props) => {
             <Card>
                 <CardBody>
                     <CardTitle tag="h5">Join a Match</CardTitle>
-                    <CardSubtitle tag="h6" className="mb-2 text-muted">Join an existing lobby</CardSubtitle>
                     <CardText>Paste the given URL into the browser or provided box.</CardText>
                     <Form inline id='form-submit-container'>
                         <FormGroup className="mb-2 me-sm-2 mb-sm-0">
@@ -34,7 +33,7 @@ const JoinCard = (props) => {
                                 onChange={event => setJoinRoomState(event.target.value)}
                             ></input>
                         </FormGroup>
-                        <Button onClick={handleJoinSubmit}>Submit</Button>
+                        <Button onClick={handleJoinSubmit} style={{backgroundColor : '#28df99', border : 'none'}}>Submit</Button>
                     </Form>
                 </CardBody>
             </Card>
