@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import socketIOClient from "socket.io-client";
 import Chessboard from "chessboardjsx";
+import './CSS/PlayMatch.css';
 
 const PlayMatch = () => {
     const pullURL = () => {
@@ -49,14 +50,15 @@ const PlayMatch = () => {
     }
 
     return (
-        <div>
-            <p>Current room members - {connectedUsers}</p>
-            {displayLink()}
-            {/* <Board /> */}
-            <Chessboard 
-                position={currBoardPos}
-                getPosition={position => updateBoard(position)}
-            />
+        <div id='play-match-container'>
+            <div style={{backgroundColor : 'white', textAlign : 'center'}}>
+                <Chessboard 
+                    position={currBoardPos}
+                    getPosition={position => updateBoard(position)}
+                />
+                <p>Current room members - {connectedUsers}</p>
+                {displayLink()}
+            </div>
         </div>
     );
 }
