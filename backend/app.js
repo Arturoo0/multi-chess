@@ -10,14 +10,22 @@ const io = require("socket.io")(http, {
   }
 });
 
+let rooms = {};
 const logResponseTime = require("./middleware/endpointLogger");
-app.use(logResponseTime, cors);
+app.use(logResponseTime, cors());
 
 app.get('/', function (req, res) {
   res.send('Server is running.');
 })
 
-let rooms = {};
+app.get('/doesRoomExist', function (req, res) {
+  if (req.query['roomID'] in rooms){
+    res.send('1');
+  }else{
+    res.send('0');
+  }
+})
+
 const baseStartingFEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 io.on('connection', (socket) => {
   console.log('Connected to by id : %s', socket.id);
@@ -31,7 +39,6 @@ io.on('connection', (socket) => {
       socket.join(socket.id);
       socket.emit('connectedToRoom', rooms[socket.id].currentlyConnected, rooms[socket.id].gameObj.fen(), socket.id);
     }
-    console.log(rooms);
   });
   
   socket.on('moveMade', (pos, roomID) => {

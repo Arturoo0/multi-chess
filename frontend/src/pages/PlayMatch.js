@@ -40,7 +40,7 @@ const PlayMatch = () => {
     }, []);
 
     const displayLink = () => {
-        if (displayLinkState) return <p>Invite link - localhost:3001/playMatch?match={socketID}</p>
+        if (displayLinkState) return <p>Invite code - {socketID}</p>
     }
 
     const updateBoard = (position) => {
