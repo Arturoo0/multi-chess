@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import socketIOClient from "socket.io-client";
 import Chessboard from "chessboardjsx";
 import './CSS/PlayMatch.css';
+const { Chess } = require('./chess.js')
 
 const PlayMatch = () => {
     const pullURL = () => {
@@ -22,6 +23,7 @@ const PlayMatch = () => {
     const [currBoardPos, setBoardPosition] = useState('');
     const [currSocketConn, setSocket] = useState(0);
     const [roomName, setName] = useState(0);
+    const [localGameObj, setLocalGameObj] = useState(0);
 
     useEffect(() => {
         const SERVER = "http://localhost:3000/";
@@ -32,7 +34,10 @@ const PlayMatch = () => {
             setUserCount(numberOfMembers);
             setBoardPosition(boardPosition);
             setName(roomID);
-            if (numberOfMembers === 2) setLinkState(false);
+            if (numberOfMembers === 2){
+                setLinkState(false);
+                setLocalGameObj(new Chess())
+            } 
             setSocketID(socket.id);
         });
         socket.on('updateBoard', (pos) => {
@@ -45,7 +50,6 @@ const PlayMatch = () => {
     }
 
     const updateBoard = (position) => {
-        setBoardPosition(position);
         currSocketConn.emit('moveMade', position, roomName);
     }
 
@@ -55,6 +59,7 @@ const PlayMatch = () => {
                 <Chessboard 
                     position={currBoardPos}
                     getPosition={position => updateBoard(position)}
+                    allowDrag={() => (connectedUsers == 2)}
                 />
                 <p>Current room members - {connectedUsers}</p>
                 {displayLink()}
