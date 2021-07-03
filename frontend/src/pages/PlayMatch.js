@@ -24,6 +24,7 @@ const PlayMatch = () => {
     const [currSocketConn, setSocket] = useState(0);
     const [roomName, setName] = useState(0);
     const [localGameObj, setLocalGameObj] = useState(0);
+    const [localPlayerColor, setlocalPlayerColor] = useState(-1);
 
     useEffect(() => {
         const SERVER = "http://localhost:3000/";
