@@ -42,7 +42,6 @@ io.on('connection', (socket) => {
   });
   
   socket.on('moveMade', (pos, roomID) => {
-    console.log(rooms);
     io.in(roomID).emit("updateBoard", pos);
   })
 });
