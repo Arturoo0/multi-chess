@@ -41,8 +41,14 @@ io.on('connection', (socket) => {
     }
   });
   
-  socket.on('moveMade', (pos, roomID) => {
-    io.in(roomID).emit("updateBoard", pos);
+  socket.on('moveMade', (pre, target, roomID) => {
+    if (
+      rooms[roomID].gameObj.move({
+        from : pre,
+        to : target
+      })
+    )
+    io.in(roomID).emit("updateBoard", rooms[roomID].gameObj.fen());
   })
 });
 

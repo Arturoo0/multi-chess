@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import socketIOClient from "socket.io-client";
 import Chessboard from "chessboardjsx";
 import './CSS/PlayMatch.css';
-const { Chess } = require('./chess.js')
+import Chess from "chess.js";
 
 const PlayMatch = () => {
     const pullURL = () => {
@@ -49,8 +49,18 @@ const PlayMatch = () => {
         if (displayLinkState) return <p>Invite code - {socketID}</p>
     }
 
-    const updateBoard = (position) => {
-        currSocketConn.emit('moveMade', position, roomName);
+    const updateBoard = (move) => {
+        if (localGameObj.move({
+            from : move.sourceSquare,
+            to : move.targetSquare
+        })){
+            currSocketConn.emit(
+                'moveMade', 
+                move.sourceSquare, 
+                move.targetSquare, 
+                roomName
+            ); 
+        }
     }
 
     return (
@@ -58,8 +68,8 @@ const PlayMatch = () => {
             <div style={{backgroundColor : 'white', textAlign : 'center'}}>
                 <Chessboard 
                     position={currBoardPos}
-                    getPosition={position => updateBoard(position)}
                     allowDrag={() => (connectedUsers == 2)}
+                    onDrop={move => updateBoard(move)}
                 />
                 <p>Current room members - {connectedUsers}</p>
                 {displayLink()}
