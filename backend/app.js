@@ -42,8 +42,7 @@ io.on('connection', (socket) => {
   });
   
   socket.on('moveMade', (pos, roomID) => {
-    // const chessObj = new Chess();
-    // rooms[socket.id] = gameObj.load(chessObj.fen(pos));
+    console.log(rooms);
     io.in(roomID).emit("updateBoard", pos);
   })
 });
