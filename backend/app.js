@@ -26,24 +26,43 @@ app.get('/doesRoomExist', function (req, res) {
   }
 })
 
+app.get('/whichColor', function (req, res) {
+  res.send({res : null});
+})
+
 // 0 : white , 1 : black 
 const baseStartingFEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 io.on('connection', (socket) => {
+  colorMapper = {
+    0 : 'white',
+    1 : 'black'
+  }
   console.log('Connected to by id : %s', socket.id);
   socket.on('joinRoom', (inv) => {
     if (inv in rooms && rooms[inv].currentlyConnected < 2){
       socket.join(inv);
       rooms[inv].currentlyConnected += 1;
-      rooms[joinerColor] = (rooms[inv].creatorColor == 1) ? 0 : 1;
-      io.in(inv).emit("connectedToRoom", rooms[inv].currentlyConnected, rooms[inv].gameObj.fen(), inv);
+      rooms[inv].joinerColor = (rooms[inv].creatorColor == 1) ? 'black' : 'white';
+      io.in(inv).emit(
+        "connectedToRoom", 
+        rooms[inv].currentlyConnected, 
+        rooms[inv].gameObj.fen(), 
+        inv
+      );
     }else if (!(socket.id in rooms)){
       rooms[socket.id] = {
         currentlyConnected : 1, 
         gameObj : new Chess(baseStartingFEN),
-        creatorColor : Math.random()
+        creatorColor :  colorMapper[Math.round(Math.random())],
+        joinerColor : null
       };
       socket.join(socket.id);
-      socket.emit('connectedToRoom', rooms[socket.id].currentlyConnected, rooms[socket.id].gameObj.fen(), socket.id);
+      socket.emit(
+        'connectedToRoom', 
+        rooms[socket.id].currentlyConnected, 
+        rooms[socket.id].gameObj.fen(), 
+        socket.id
+      );
     }
   });
   

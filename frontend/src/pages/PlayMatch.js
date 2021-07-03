@@ -14,7 +14,12 @@ const PlayMatch = () => {
             paramObj[p[0]] = p[1];
         }
         return paramObj
-    }
+    };
+
+    const colorMapper = {
+        'wP' : 'white',
+        'bP' : 'black'
+    };
 
     const [connectedUsers, setUserCount] = useState(0);
     const [displayLinkState, setLinkState] = useState(true);
@@ -24,20 +29,21 @@ const PlayMatch = () => {
     const [currSocketConn, setSocket] = useState(0);
     const [roomName, setName] = useState(0);
     const [localGameObj, setLocalGameObj] = useState(0);
-    const [localPlayerColor, setlocalPlayerColor] = useState(-1);
+    const [localPlayerColor, setlocalPlayerColor] = useState();
+    const [isLocalColorSet, setLocalColorIsSet] = useState(false);
 
     useEffect(() => {
         const SERVER = "http://localhost:3000/";
         const socket = socketIOClient(SERVER);
         setSocket(socket);
         socket.emit('joinRoom', urlParams.match);
-        socket.on('connectedToRoom', (numberOfMembers, boardPosition, roomID) => {
+        socket.on('connectedToRoom', (numberOfMembers, boardPosition, color, roomID) => {
             setUserCount(numberOfMembers);
             setBoardPosition(boardPosition);
             setName(roomID);
             if (numberOfMembers === 2){
                 setLinkState(false);
-                setLocalGameObj(new Chess())
+                setLocalGameObj(new Chess());
             } 
             setSocketID(socket.id);
         });
@@ -48,7 +54,8 @@ const PlayMatch = () => {
 
     const displayLink = () => {
         if (displayLinkState) return <p>Invite code - {socketID}</p>
-    }
+        else return null;
+    };
 
     const updateBoard = (move) => {
         if (localGameObj.move({
@@ -62,15 +69,16 @@ const PlayMatch = () => {
                 roomName
             ); 
         }
-    }
+    };
 
     return (
         <div id='play-match-container'>
             <div style={{backgroundColor : 'white', textAlign : 'center'}}>
                 <Chessboard 
                     position={currBoardPos}
-                    allowDrag={() => (connectedUsers == 2)}
+                    allowDrag={drag => (connectedUsers === 2)}
                     onDrop={move => updateBoard(move)}
+                    orientation={localPlayerColor}
                 />
                 <p>Current room members - {connectedUsers}</p>
                 {displayLink()}
