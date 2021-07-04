@@ -75,7 +75,7 @@ const PlayMatch = () => {
             <div style={{backgroundColor : 'white', textAlign : 'center'}}>
                 <Chessboard 
                     position={currBoardPos}
-                    allowDrag={drag => (userCount === 2)}
+                    allowDrag={drag => (userCount === 2 && colorMapper[localPlayerColor] == drag.piece)}
                     onDrop={move => updateBoard(move)}
                     orientation={localPlayerColor}
                 />
