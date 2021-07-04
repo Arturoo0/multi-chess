@@ -22,55 +22,47 @@ const PlayMatch = () => {
     };
 
     const [connectedUsers, setUserCount] = useState(0);
-    const [displayLinkState, setLinkState] = useState(true);
-    const [socketID, setSocketID] = useState(0);
-    const [urlParams, setParams] = useState(pullURL());
     const [currBoardPos, setBoardPosition] = useState('');
     const [currSocketConn, setSocket] = useState(0);
     const [roomName, setName] = useState(0);
-    const [localGameObj, setLocalGameObj] = useState(0);
+    const [localGameObj, setLocalGameObj] = useState(new Chess());
     const [localPlayerColor, setlocalPlayerColor] = useState();
 
     useEffect(() => {
         const SERVER = "http://localhost:3000/";
         const socket = socketIOClient(SERVER);
         setSocket(socket);
-        socket.emit('joinRoom', urlParams.match);
-        socket.on('connectedToRoom', (numberOfMembers, boardPosition, color, roomID) => {
-            console.log(color);
-            setlocalPlayerColor(color);
+        socket.emit('joinRoom', pullURL().match);
+        socket.on('connectedToRoom', (numberOfMembers, boardPosition, roomID) => {
             setUserCount(numberOfMembers);
             setBoardPosition(boardPosition);
             setName(roomID);
-            if (numberOfMembers === 2){
-                setLinkState(false);
-                setLocalGameObj(new Chess());
-            } 
-            setSocketID(socket.id);
         });
-        socket.on('updateBoard', (pos) => {
+        socket.on('setColor', (color) => {
+            setlocalPlayerColor(color)
+        })
+        socket.on('updateBoard', (pos, pre, target) => {
             setBoardPosition(pos);
+            localGameObj.move({
+                from : pre,
+                to : target
+            });
         })
     }, []);
 
     const displayLink = () => {
-        if (displayLinkState) return <p>Invite code - {socketID}</p>
+        if (connectedUsers !== 2) return <p>Invite code - {currSocketConn.id}</p>
         else return null;
     };
 
     const updateBoard = (move) => {
-        if (localGameObj.move({
-            from : move.sourceSquare,
-            to : move.targetSquare
-        })){
-            currSocketConn.emit(
-                'moveMade', 
-                move.sourceSquare, 
-                move.targetSquare, 
-                roomName
-            ); 
-        }
-    };
+        currSocketConn.emit(
+            'moveMade', 
+            move.sourceSquare, 
+            move.targetSquare, 
+            roomName
+        ); 
+    }
 
     return (
         <div id='play-match-container'>

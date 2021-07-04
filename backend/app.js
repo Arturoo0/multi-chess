@@ -47,9 +47,12 @@ io.on('connection', (socket) => {
         "connectedToRoom", 
         rooms[inv].currentlyConnected, 
         rooms[inv].gameObj.fen(), 
-        rooms[socket.id].joinerColor,
         inv
       );
+      socket.emit(
+        'setColor',
+        rooms[inv].joinerColor
+      )
     }else if (!(socket.id in rooms)){
       rooms[socket.id] = {
         currentlyConnected : 1, 
@@ -62,9 +65,12 @@ io.on('connection', (socket) => {
         'connectedToRoom', 
         rooms[socket.id].currentlyConnected, 
         rooms[socket.id].gameObj.fen(), 
-        rooms[socket.id].creatorColor,
         socket.id
       );
+      socket.emit(
+        'setColor',
+        rooms[socket.id].creatorColor
+      )
     }
   });
   
@@ -75,7 +81,12 @@ io.on('connection', (socket) => {
         to : target
       })
     )
-    io.in(roomID).emit("updateBoard", rooms[roomID].gameObj.fen());
+    io.in(roomID).emit(
+      "updateBoard", 
+      rooms[roomID].gameObj.fen(),
+      pre,
+      target
+    );
   })
 });
 
