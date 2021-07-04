@@ -42,7 +42,7 @@ io.on('connection', (socket) => {
     if (inv in rooms && rooms[inv].currentlyConnected < 2){
       socket.join(inv);
       rooms[inv].currentlyConnected += 1;
-      rooms[inv].joinerColor = (rooms[inv].creatorColor == 1) ? 'black' : 'white';
+      rooms[inv].joinerColor = (rooms[inv].creatorColor == 1) ? 'white' : 'black';
       socket.emit(
         "connectedToRoom", 
         rooms[inv].joinerColor

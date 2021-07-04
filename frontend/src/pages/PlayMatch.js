@@ -17,8 +17,8 @@ const PlayMatch = () => {
     };
 
     const colorMapper = {
-        'white' : 'wP',
-        'black' : 'bP'
+        'white' : 'w',
+        'black' : 'b'
     };
 
     const baseStartingFEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -36,7 +36,7 @@ const PlayMatch = () => {
         socket.emit('joinRoom', pullURL().match);
         socket.on('connectedToRoom', (color) => {
             setlocalPlayerColor(color);
-            setUserCount(userCount + 1);
+            setUserCount(userCount => userCount + 1);
         });
         socket.on('startGame', (numberOfMembers, boardPosition, roomID) => {
             setUserCount(numberOfMembers);
@@ -75,7 +75,7 @@ const PlayMatch = () => {
             <div style={{backgroundColor : 'white', textAlign : 'center'}}>
                 <Chessboard 
                     position={currBoardPos}
-                    allowDrag={drag => (userCount === 2 && colorMapper[localPlayerColor] == drag.piece)}
+                    allowDrag={drag => (userCount === 2 && colorMapper[localPlayerColor] == drag.piece.charAt(0))}
                     onDrop={move => updateBoard(move)}
                     orientation={localPlayerColor}
                 />
