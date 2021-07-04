@@ -43,15 +43,15 @@ io.on('connection', (socket) => {
       socket.join(inv);
       rooms[inv].currentlyConnected += 1;
       rooms[inv].joinerColor = (rooms[inv].creatorColor == 1) ? 'black' : 'white';
-      io.in(inv).emit(
-        "connectedToRoom", 
-        rooms[inv].currentlyConnected, 
-        rooms[inv].gameObj.fen(), 
-        inv
-      );
       socket.emit(
-        'setColor',
+        "connectedToRoom", 
         rooms[inv].joinerColor
+      );
+      io.in(inv).emit(
+        'startGame',
+        rooms[inv].currentlyConnected,
+        rooms[inv].gameObj.fen(),
+        inv 
       )
     }else if (!(socket.id in rooms)){
       rooms[socket.id] = {
@@ -63,14 +63,8 @@ io.on('connection', (socket) => {
       socket.join(socket.id);
       socket.emit(
         'connectedToRoom', 
-        rooms[socket.id].currentlyConnected, 
-        rooms[socket.id].gameObj.fen(), 
-        socket.id
-      );
-      socket.emit(
-        'setColor',
         rooms[socket.id].creatorColor
-      )
+      );
     }
   });
   

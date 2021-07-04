@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import socketIOClient from "socket.io-client";
 import Chessboard from "chessboardjsx";
 import './CSS/PlayMatch.css';
@@ -17,12 +17,13 @@ const PlayMatch = () => {
     };
 
     const colorMapper = {
-        'wP' : 'white',
-        'bP' : 'black'
+        'white' : 'wP',
+        'black' : 'bP'
     };
 
-    const [connectedUsers, setUserCount] = useState(0);
-    const [currBoardPos, setBoardPosition] = useState('');
+    const baseStartingFEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+    const [userCount, setUserCount] = useState(0);
+    const [currBoardPos, setBoardPosition] = useState(baseStartingFEN);
     const [currSocketConn, setSocket] = useState(0);
     const [roomName, setName] = useState(0);
     const [localGameObj, setLocalGameObj] = useState(new Chess());
@@ -33,13 +34,14 @@ const PlayMatch = () => {
         const socket = socketIOClient(SERVER);
         setSocket(socket);
         socket.emit('joinRoom', pullURL().match);
-        socket.on('connectedToRoom', (numberOfMembers, boardPosition, roomID) => {
+        socket.on('connectedToRoom', (color) => {
+            setlocalPlayerColor(color);
+            setUserCount(userCount + 1);
+        });
+        socket.on('startGame', (numberOfMembers, boardPosition, roomID) => {
             setUserCount(numberOfMembers);
             setBoardPosition(boardPosition);
             setName(roomID);
-        });
-        socket.on('setColor', (color) => {
-            setlocalPlayerColor(color)
         })
         socket.on('updateBoard', (pos, pre, target) => {
             setBoardPosition(pos);
@@ -48,10 +50,14 @@ const PlayMatch = () => {
                 to : target
             });
         })
+
+        return () => {
+            socket.disconnect();
+        }
     }, []);
 
     const displayLink = () => {
-        if (connectedUsers !== 2) return <p>Invite code - {currSocketConn.id}</p>
+        if (userCount !== 2) return <p>Invite code - {currSocketConn.id}</p>
         else return null;
     };
 
@@ -69,11 +75,11 @@ const PlayMatch = () => {
             <div style={{backgroundColor : 'white', textAlign : 'center'}}>
                 <Chessboard 
                     position={currBoardPos}
-                    allowDrag={drag => (connectedUsers === 2)}
+                    allowDrag={drag => (userCount === 2)}
                     onDrop={move => updateBoard(move)}
                     orientation={localPlayerColor}
                 />
-                <p>Current room members - {connectedUsers}</p>
+                <p>Current room members - {userCount}</p>
                 {displayLink()}
             </div>
         </div>
