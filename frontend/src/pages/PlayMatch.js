@@ -30,7 +30,6 @@ const PlayMatch = () => {
     const [roomName, setName] = useState(0);
     const [localGameObj, setLocalGameObj] = useState(0);
     const [localPlayerColor, setlocalPlayerColor] = useState();
-    const [isLocalColorSet, setLocalColorIsSet] = useState(false);
 
     useEffect(() => {
         const SERVER = "http://localhost:3000/";
@@ -38,6 +37,8 @@ const PlayMatch = () => {
         setSocket(socket);
         socket.emit('joinRoom', urlParams.match);
         socket.on('connectedToRoom', (numberOfMembers, boardPosition, color, roomID) => {
+            console.log(color);
+            setlocalPlayerColor(color);
             setUserCount(numberOfMembers);
             setBoardPosition(boardPosition);
             setName(roomID);

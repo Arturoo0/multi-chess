@@ -47,6 +47,7 @@ io.on('connection', (socket) => {
         "connectedToRoom", 
         rooms[inv].currentlyConnected, 
         rooms[inv].gameObj.fen(), 
+        rooms[socket.id].joinerColor,
         inv
       );
     }else if (!(socket.id in rooms)){
@@ -61,6 +62,7 @@ io.on('connection', (socket) => {
         'connectedToRoom', 
         rooms[socket.id].currentlyConnected, 
         rooms[socket.id].gameObj.fen(), 
+        rooms[socket.id].creatorColor,
         socket.id
       );
     }
