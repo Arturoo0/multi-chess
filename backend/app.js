@@ -26,25 +26,61 @@ app.get('/doesRoomExist', function (req, res) {
   }
 })
 
+app.get('/whichColor', function (req, res) {
+  res.send({res : null});
+})
+
+// 0 : white , 1 : black 
 const baseStartingFEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 io.on('connection', (socket) => {
+  colorMapper = {
+    0 : 'white',
+    1 : 'black'
+  }
   console.log('Connected to by id : %s', socket.id);
   socket.on('joinRoom', (inv) => {
     if (inv in rooms && rooms[inv].currentlyConnected < 2){
       socket.join(inv);
       rooms[inv].currentlyConnected += 1;
-      io.in(inv).emit("connectedToRoom", rooms[inv].currentlyConnected, rooms[inv].gameObj.fen(), inv);
+      rooms[inv].joinerColor = (rooms[inv].creatorColor == 'black') ? 'white' : 'black';
+      socket.emit(
+        "connectedToRoom", 
+        rooms[inv].joinerColor
+      );
+      io.in(inv).emit(
+        'startGame',
+        rooms[inv].currentlyConnected,
+        rooms[inv].gameObj.fen(),
+        inv 
+      )
     }else if (!(socket.id in rooms)){
-      rooms[socket.id] = {currentlyConnected : 1, gameObj : new Chess(baseStartingFEN)};
+      rooms[socket.id] = {
+        currentlyConnected : 1, 
+        gameObj : new Chess(baseStartingFEN),
+        creatorColor :  colorMapper[Math.round(Math.random())],
+        joinerColor : null
+      };
       socket.join(socket.id);
-      socket.emit('connectedToRoom', rooms[socket.id].currentlyConnected, rooms[socket.id].gameObj.fen(), socket.id);
+      socket.emit(
+        'connectedToRoom', 
+        rooms[socket.id].creatorColor
+      );
     }
   });
   
-  socket.on('moveMade', (pos, roomID) => {
-    // const chessObj = new Chess();
-    // rooms[socket.id] = gameObj.load(chessObj.fen(pos));
-    io.in(roomID).emit("updateBoard", pos);
+  socket.on('moveMade', (pre, target, roomID) => {
+    if (
+      rooms[roomID].gameObj.move({
+        from : pre,
+        to : target
+      })
+    )
+    io.in(roomID).emit(
+      "updateBoard", 
+      rooms[roomID].gameObj.fen(),
+      pre,
+      target
+    );
   })
 });
 
