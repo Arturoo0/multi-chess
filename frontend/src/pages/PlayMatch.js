@@ -56,8 +56,13 @@ const PlayMatch = () => {
         }
     }, []);
 
-    const displayLink = () => {
-        if (userCount !== 2) return <p>Invite code - {currSocketConn.id}</p>
+    const displayAwait = () => {
+        if (userCount !== 2) return (
+            <div style={{backgroundColor : 'white'}}>
+                <h4>Current room members - {userCount}</h4>
+                <h4>Invite code - {currSocketConn.id}</h4>
+            </div>
+        ); 
         else return null;
     };
 
@@ -72,15 +77,15 @@ const PlayMatch = () => {
 
     return (
         <div id='play-match-container'>
-            <div style={{backgroundColor : 'white', textAlign : 'center'}}>
+            <div style={{textAlign : 'center'}}>
                 <Chessboard 
                     position={currBoardPos}
                     allowDrag={drag => (userCount === 2 && colorMapper[localPlayerColor] == drag.piece.charAt(0))}
                     onDrop={move => updateBoard(move)}
                     orientation={localPlayerColor}
                 />
-                <p>Current room members - {userCount}</p>
-                {displayLink()}
+                <br></br>
+                {displayAwait()}
             </div>
         </div>
     );
