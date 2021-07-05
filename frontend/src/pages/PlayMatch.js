@@ -26,7 +26,7 @@ const PlayMatch = () => {
     const [userCount, setUserCount] = useState(0);
     const [currBoardPos, setBoardPosition] = useState(baseStartingFEN);
     const [currSocketConn, setSocket] = useState(0);
-    const [roomName, setName] = useState(0);
+    const [roomName, setRoomName] = useState(0);
     const [localGameObj, setLocalGameObj] = useState(new Chess());
     const [localPlayerColor, setlocalPlayerColor] = useState();
 
@@ -42,7 +42,7 @@ const PlayMatch = () => {
         socket.on('startGame', (numberOfMembers, boardPosition, roomID) => {
             setUserCount(numberOfMembers);
             setBoardPosition(boardPosition);
-            setName(roomID);
+            setRoomName(roomID);
         })
         socket.on('updateBoard', (pos, pre, target) => {
             setBoardPosition(pos);
@@ -51,8 +51,11 @@ const PlayMatch = () => {
                 to : target
             });
         })
-
+        socket.on('_disconnect', () => {
+            console.log('the other player has diconnected')
+        }) 
         return () => {
+            socket.emit('_disconnect', roomName);
             socket.disconnect();
         }
     }, []);

@@ -82,6 +82,12 @@ io.on('connection', (socket) => {
       target
     );
   })
+
+  socket.on('_disconnect', (roomID) => {
+    io.in(roomID).emit(
+      '_disconnect'
+    );
+  })
 });
 
 const port = 3000;

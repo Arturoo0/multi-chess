@@ -2,18 +2,21 @@
 import React, { useState } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 import Button from 'react-bootstrap/Button';
-import Badge from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
+import Badge from 'react-bootstrap/Badge';
 
 const MatchPanel = (props) => {
-    const styleConfig = {
+    const styleParentContainer = {
         backgroundColor : props.config.color,
         display : 'flex',
-        flexDirection : 'column'
+        flexDirection : 'column', 
+        padding : '10px 10px',
+        borderRadius : '0 5px 5px 0'
     }
 
     const styleInnerPanelDiv = {
         display : 'flex',
-        flexDirection : 'row',
+        flexDirection : 'column',
         justifyContent : 'center',
     }
 
@@ -25,13 +28,19 @@ const MatchPanel = (props) => {
                         (props.config.connectedPlayers < 2) 
                         ? (
                             <div>
-                                <Button size='sm' variant="primary" disabled>
-                                    Waiting for player 
-                                    <Badge bg="secondary">
-                                        <Spinner animation="grow" />
+                                <Card className='mb-2' body>
+                                    <Button size='md' variant="primary" disabled>
+                                        Waiting for player 
+                                        <Button bg="secondary" disabled>
+                                            <Spinner animation="grow" />
+                                        </Button>
+                                    </Button>
+                                </Card>
+                                <Button variant="success" disabled>
+                                    Invite code: <Badge bg="secondary">
+                                        {props.config.inviteCode}
                                     </Badge>
                                 </Button>
-                                <h6>Invite code - {props.config.inviteCode}</h6>
                             </div>
                         )
                         : null
@@ -42,7 +51,7 @@ const MatchPanel = (props) => {
     };
     
     return (
-        <div style={styleConfig}>
+        <div style={styleParentContainer}>
             {displayAwait()}
             <div>
                 Connected Users : {props.config.connectedPlayers}
