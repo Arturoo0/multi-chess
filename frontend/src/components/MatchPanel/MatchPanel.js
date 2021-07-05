@@ -36,11 +36,11 @@ const MatchPanel = (props) => {
                                         </Button>
                                     </Button>
                                 </Card>
-                                <Button variant="success" disabled>
+                                <Badge style={{fontSize : '1rem'}} variant="success" disabled>
                                     Invite code: <Badge bg="secondary">
                                         {props.config.inviteCode}
                                     </Badge>
-                                </Button>
+                                </Badge>
                             </div>
                         )
                         : null

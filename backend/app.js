@@ -5,7 +5,7 @@ const cors = require('cors');
 const { Chess } = require('chess.js');
 const io = require("socket.io")(http, {
   cors: {
-    origin: "http://localhost:3001",
+    origin: "http://localhost:3002",
     methods: ["GET", "POST"]
   }
 });
@@ -83,8 +83,9 @@ io.on('connection', (socket) => {
     );
   })
 
-  socket.on('_disconnect', (roomID) => {
-    io.in(roomID).emit(
+  socket.on('_disconnect', (roomName) => {
+    console.log(roomName);
+    io.in(socket.id).emit(
       '_disconnect'
     );
   })
