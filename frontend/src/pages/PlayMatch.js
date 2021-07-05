@@ -4,6 +4,7 @@ import socketIOClient from "socket.io-client";
 import Chessboard from "chessboardjsx";
 import './CSS/PlayMatch.css';
 import Chess from "chess.js";
+import { MatchPanel } from "../components";
 
 const PlayMatch = () => {
     const pullURL = () => {
@@ -86,6 +87,10 @@ const PlayMatch = () => {
                 />
                 <br></br>
                 {displayAwait()}
+                <MatchPanel config={{
+                    color : 'white',
+                    connectedPlayers : userCount
+                }}/>
             </div>
         </div>
     );
