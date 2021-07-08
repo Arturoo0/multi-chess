@@ -29,6 +29,7 @@ const PlayMatch = () => {
     const [roomName, setRoomName] = useState(0);
     const [localGameObj, setLocalGameObj] = useState(new Chess());
     const [localPlayerColor, setlocalPlayerColor] = useState();
+    const [isDisconnected, setIsDisconnected] = useState(false);
 
     useEffect(() => {
         const SERVER = "http://localhost:3000/";
@@ -49,6 +50,7 @@ const PlayMatch = () => {
 
         socket.on('playerDisconnect', () => {
             setUserCount(userCount => userCount - 1);
+            setIsDisconnected(true);
         })
 
         socket.on('updateBoard', (pos, pre, target) => {
@@ -86,7 +88,8 @@ const PlayMatch = () => {
                 <MatchPanel config={{
                     color : 'white',
                     connectedPlayers : userCount, 
-                    inviteCode : currSocketConn.id
+                    inviteCode : currSocketConn.id,
+                    _isDisconnected : isDisconnected
                 }}/>
             </div>
         </div>
