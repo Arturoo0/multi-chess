@@ -30,6 +30,7 @@ const PlayMatch = () => {
     const [localGameObj, setLocalGameObj] = useState(new Chess());
     const [localPlayerColor, setlocalPlayerColor] = useState();
     const [isDisconnected, setIsDisconnected] = useState(false);
+    const [winner, setWinner] = useState(null);
 
     useEffect(() => {
         const SERVER = "http://localhost:3000/";
@@ -46,12 +47,16 @@ const PlayMatch = () => {
             setUserCount(numberOfMembers);
             setBoardPosition(boardPosition);
             setRoomName(roomID);
-        })
+        });
 
         socket.on('playerDisconnect', () => {
             setUserCount(userCount => userCount - 1);
             setIsDisconnected(true);
-        })
+        });
+
+        socket.on('gameOver', (winner) => {
+            setWinner(winner);
+        });
 
         socket.on('updateBoard', (pos, pre, target) => {
             setBoardPosition(pos);
@@ -59,7 +64,7 @@ const PlayMatch = () => {
                 from : pre,
                 to : target
             });
-        })
+        });
     }, []);
 
     const updateBoard = (move) => {
@@ -81,7 +86,11 @@ const PlayMatch = () => {
             }>
                 <Chessboard 
                     position={currBoardPos}
-                    allowDrag={drag => (userCount === 2 && colorMapper[localPlayerColor] == drag.piece.charAt(0))}
+                    allowDrag={drag => (
+                        userCount === 2 
+                        && colorMapper[localPlayerColor] == drag.piece.charAt(0)
+                        && winner === null 
+                    )}
                     onDrop={move => updateBoard(move)}
                     orientation={localPlayerColor}
                 />
@@ -89,7 +98,8 @@ const PlayMatch = () => {
                     color : 'white',
                     connectedPlayers : userCount, 
                     inviteCode : currSocketConn.id,
-                    _isDisconnected : isDisconnected
+                    _isDisconnected : isDisconnected,
+                    _winner : winner 
                 }}/>
             </div>
         </div>

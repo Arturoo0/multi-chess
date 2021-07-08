@@ -74,13 +74,21 @@ io.on('connection', (socket) => {
         from : pre,
         to : target
       })
-    )
-    io.in(roomID).emit(
-      'updateBoard', 
-      rooms[roomID].gameObj.fen(),
-      pre,
-      target
-    );
+    ){
+      io.in(roomID).emit(
+        'updateBoard', 
+        rooms[roomID].gameObj.fen(),
+        pre,
+        target
+      );  
+    }
+
+    if (rooms[roomID].gameObj.game_over()){
+      io.in(roomID).emit(
+        'gameOver',
+        (rooms[roomID].gameObj.turn() === 'white') ? 'black' : 'white'
+      );
+    }
   })
 
   socket.on('disconnect', () => {

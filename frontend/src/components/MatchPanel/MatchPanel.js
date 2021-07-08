@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Badge from 'react-bootstrap/Badge';
 import { Reception4 } from 'react-bootstrap-icons';
+import { CardTitle } from 'reactstrap';
 
 const MatchPanel = (props) => {
     const styleParentContainer = {
@@ -30,18 +31,24 @@ const MatchPanel = (props) => {
                         ? (
                             <div>
                                 <Card className='mb-2' body>
-                                    <Button size='md' variant="primary" disabled>
-                                        Waiting for player 
-                                        <Button bg="secondary" disabled>
-                                            <Spinner animation="grow" />
-                                        </Button>
-                                    </Button>
+                                    <div style={{styleInnerPanelDiv}}>
+                                        <div style={{marginBottom : '10px'}}>
+                                            <Button size='md' variant="primary" disabled>
+                                                Waiting for player 
+                                                <Button bg="secondary" disabled>
+                                                    <Spinner animation="grow" />
+                                                </Button>
+                                            </Button>
+                                        </div>
+                                        <div>
+                                            <Badge style={{fontSize : '1rem'}} variant="success" disabled>
+                                                Invite code: <Badge bg="secondary">
+                                                    {props.config.inviteCode}
+                                                </Badge>
+                                            </Badge>
+                                        </div>
+                                    </div>
                                 </Card>
-                                <Badge style={{fontSize : '1rem'}} variant="success" disabled>
-                                    Invite code: <Badge bg="secondary">
-                                        {props.config.inviteCode}
-                                    </Badge>
-                                </Badge>
                             </div>
                         )
                         : null
@@ -67,10 +74,11 @@ const MatchPanel = (props) => {
     }   
 
     const displayConnected = () => {
-        if (props.config.connectedPlayers === 2){
+        if (props.config.connectedPlayers === 2 && props.config._winner === null){
+            props.config.color = 'transparent';
             return (
                 <div style={{marginTop : 'auto'}}>
-                    <Button variant="success" disabled>
+                    <Button style={{opacity : '1'}} variant='success' disabled>
                         <Reception4 size={32}/>
                     </Button>
                 </div>
@@ -78,12 +86,36 @@ const MatchPanel = (props) => {
         }
         return null;
     }
+
+    const displayWinner = () => {
+        if (props.config._winner !== null){
+            props.config.color = 'white';
+            return (
+                <div style={{justifyContent : 'center'}}>
+                    <Card style={{ width: '10rem', padding : '7px'}}>
+                        <CardTitle style={{
+                            fontWeight : '600', 
+                            fontSize : '1.4rem',
+                            opacity : '.9'
+                        }}>Game over</CardTitle>
+                        <Badge style={{fontSize : '.9rem'}} variant="success" disabled>
+                            <Badge style={{fontSize : '.9rem'}}>
+                                {props.config._winner.toUpperCase() + ' wins'}
+                            </Badge>
+                        </Badge>
+                    </Card>
+                </div> 
+            );
+        }
+        
+    }
     
     return (
         <div style={styleParentContainer}>
             {displayAwait()}
             {displayPlayerDisconnect()}
             {displayConnected()}
+            {displayWinner()}
         </div> 
     );
 }
