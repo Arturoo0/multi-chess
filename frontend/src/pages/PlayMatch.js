@@ -34,7 +34,7 @@ const PlayMatch = () => {
         const SERVER = "http://localhost:3000/";
         const socket = socketIOClient(SERVER);
         setSocket(socket);
-        
+
         socket.emit('joinRoom', pullURL().match);
         socket.on('connectedToRoom', (color) => {
             setlocalPlayerColor(color);
@@ -47,6 +47,10 @@ const PlayMatch = () => {
             setRoomName(roomID);
         })
 
+        socket.on('playerDisconnect', () => {
+            setUserCount(userCount => userCount - 1);
+        })
+
         socket.on('updateBoard', (pos, pre, target) => {
             setBoardPosition(pos);
             localGameObj.move({
@@ -54,18 +58,6 @@ const PlayMatch = () => {
                 to : target
             });
         })
-
-        socket.on('_disconnect', () => {
-            console.log('the other player has diconnected')
-        }) 
-
-        window.addEventListener('beforeunload', () => {
-            socket.emit('_disconnect', roomName);
-            socket.disconnect();  
-        });
-        return () => {
-            window.removeEventListener('beforeunload');
-        }
     }, []);
 
     const updateBoard = (move) => {

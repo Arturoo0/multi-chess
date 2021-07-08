@@ -76,17 +76,16 @@ io.on('connection', (socket) => {
       })
     )
     io.in(roomID).emit(
-      "updateBoard", 
+      'updateBoard', 
       rooms[roomID].gameObj.fen(),
       pre,
       target
     );
   })
 
-  socket.on('_disconnect', (roomName) => {
-    console.log(roomName);
+  socket.on('disconnect', () => {
     io.in(socket.id).emit(
-      '_disconnect'
+      'playerDisconnect'
     );
   })
 });
